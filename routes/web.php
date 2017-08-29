@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('threads', 'Treads');
+Route::resource('threads', 'Threads');
 
 Route::post('threads/{thread}/replies', 'Replies@store');
 

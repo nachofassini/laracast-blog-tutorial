@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use App\Thread;
 use Illuminate\Http\Request;
 
-class Treads extends Controller
+class Threads extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only('store');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +42,18 @@ class Treads extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+
+        $thread = Thread::forceCreate([
+           'title' => $request->title,
+           'body' => $request->body,
+           'user_id' => auth()->id()
+        ]);
+
+        return response($thread->path());
     }
 
     /**
