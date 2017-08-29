@@ -20,16 +20,13 @@ class ParticipateInForumTest extends TestCase
 
     /**
      * @test
-     * @param \Faker\Generator $faker
      */
     public function testAnAuthenticatedUserCanParticipateInForumThreads()
     {
-        $this->be($user = factory(\App\User::class)->create());
+        $thread = create(\App\Thread::class);
 
-        $thread = factory(\App\Thread::class)->create();
-
-        $reply = factory(\App\Reply::class)->make();
-        $this->post("{$thread->path()}/replies", $reply->toArray());
+        $reply = make(\App\Reply::class);
+        $this->signIn()->post("{$thread->path()}/replies", $reply->toArray());
 
         $this->get("{$thread->path()}")
             ->assertSee($reply->body);

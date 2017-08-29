@@ -16,7 +16,7 @@ class ThreadTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->thread = factory(\App\Thread::class)->create();
+        $this->thread = create(\App\Thread::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class ThreadTest extends TestCase
 
     public function testItCanAddAReply()
     {
-        $reply = factory(\App\Reply::class)->create();
+        $reply = create(\App\Reply::class);
 
         $this->thread->addReply([
             'body' => $reply->body,
