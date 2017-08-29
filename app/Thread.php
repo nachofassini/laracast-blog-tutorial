@@ -8,9 +8,14 @@ class Thread extends Model
 {
     protected $guarded = [];
 
-    public function replies()
+    public function addReply($reply)
     {
-        return $this->hasMany(Reply::class);
+        $this->replies()->create($reply);
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
     }
 
     public function creator()
@@ -18,13 +23,13 @@ class Thread extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function addReply($reply)
-    {
-        $this->replies()->create($reply);
-    }
-
     public function path()
     {
-        return route('threads.show', $this->id);
+        return route('channel.threads.show', [$this->channel->slug, $this->id]);
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
     }
 }

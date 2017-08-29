@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -44,13 +45,15 @@ class Threads extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            'channel_id' => 'required',
         ]);
 
         $thread = Thread::forceCreate([
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => auth()->id()
+            'channel_id' => $request->channel_id,
+            'user_id' => auth()->id(),
         ]);
 
         return redirect($thread->path());
@@ -62,7 +65,7 @@ class Threads extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channelSlug, Thread $thread)
     {
         return view('threads.show', compact('thread'));
     }

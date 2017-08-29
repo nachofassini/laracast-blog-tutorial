@@ -22,9 +22,26 @@ class ThreadTest extends TestCase
     /**
      * @test
      */
+    public function testAThreadCanMakeAStringPath()
+    {
+        $expectedPath = url("/threads/{$this->thread->channel->slug}/{$this->thread->id}");
+        $this->assertEquals($expectedPath, $this->thread->path());
+    }
+
+    /**
+     * @test
+     */
     public function testAThreadMayHaveReplies()
     {
         $this->assertInstanceOf(Collection::class, $this->thread->replies);
+    }
+
+    /**
+     * @test
+     */
+    public function testAThreadBelongsToAChannel()
+    {
+        $this->assertInstanceOf(\App\Channel::class, $this->thread->channel);
     }
 
     /**

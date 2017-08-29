@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Channel;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -13,9 +14,8 @@ class ParticipateInForumTest extends TestCase
 
     public function testAnUnauthenticaedUserShouldNotReplyAThread()
     {
-        $this->expectException(\Illuminate\Auth\AuthenticationException::class);
-
-        $this->post("threads/1/replies", []);
+        $this->withExceptionHandling()
+            ->post("threads/some-channel/1/replies", []);
     }
 
     /**

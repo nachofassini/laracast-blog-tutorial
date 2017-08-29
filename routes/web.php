@@ -15,9 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/threads/{channel}/{thread}', 'Threads@show')->name('channel.threads.show');
 Route::resource('threads', 'Threads');
 
-Route::post('threads/{thread}/replies', 'Replies@store');
+Route::post('threads/{channel}/{thread}/replies', 'Replies@store');
 
 Auth::routes();
 
