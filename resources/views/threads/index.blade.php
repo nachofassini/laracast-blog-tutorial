@@ -8,6 +8,8 @@
                     <div class="panel-heading">Forum threads</div>
 
                     <div class="panel-body">
+                        <a class="btn btn-default pull-right" href="{{ route('threads.create') }}">Create new thread</a>
+                        <hr>
                         @foreach($threads as $thread)
                             <article>
                                 <h4><a href="{{ $thread->path() }}">{{ $thread->title }}</a></h4>

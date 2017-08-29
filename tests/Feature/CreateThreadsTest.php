@@ -25,6 +25,16 @@ class CreateThreadsTest extends TestCase
     /**
      * @test
      */
+    public function testGuestCantSeeCreateThreadsPage()
+    {
+        $this->withExceptionHandling()
+            ->get('threads/create', [])
+            ->assertRedirect(route('login'));
+    }
+
+    /**
+     * @test
+     */
     public function testAnAuthenticatedUserCanCreateThreads()
     {
         $thread = make(\App\Thread::class);
