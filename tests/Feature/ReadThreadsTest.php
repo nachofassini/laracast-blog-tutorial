@@ -33,7 +33,7 @@ class ReadThreadsTest extends TestCase
      */
     public function itCanSeeAThread()
     {
-        $this->get('/threads/' . $this->thread->id)
+        $this->get($this->thread->path())
             ->assertStatus(200)
             ->assertSee($this->thread->title);
     }
@@ -45,7 +45,7 @@ class ReadThreadsTest extends TestCase
     {
         $reply = factory(\App\Reply::class)->create(['thread_id' => $this->thread->id]);
 
-        $this->get("threads/{$this->thread->id}")
+        $this->get($this->thread->path())
             ->assertSee($reply->body);
     }
 }
