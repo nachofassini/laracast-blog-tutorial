@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Thread;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class Threads extends Controller
 {
@@ -46,7 +47,7 @@ class Threads extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'channel_id' => 'required',
+            'channel_id' => ['required', Rule::exists('channels', 'id')],
         ]);
 
         $thread = Thread::forceCreate([

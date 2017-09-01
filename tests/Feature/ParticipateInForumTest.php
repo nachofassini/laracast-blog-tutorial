@@ -24,11 +24,24 @@ class ParticipateInForumTest extends TestCase
     public function testAnAuthenticatedUserCanParticipateInForumThreads()
     {
         $thread = create(\App\Thread::class);
-
         $reply = make(\App\Reply::class);
-        $this->signIn()->post("{$thread->path()}/replies", $reply->toArray());
+
+        $this->signIn()
+            ->post("{$thread->path()}/replies", $reply->toArray());
 
         $this->get("{$thread->path()}")
             ->assertSee($reply->body);
+    }
+
+
+    public function testAReplyRequiresABody()
+    {
+        $thread = create(\App\Thread::class);
+        $reply = make(\App\Reply::class, ['body' => '']);
+
+        $this->withExceptionHandling()
+            ->signIn()
+            ->post("{$thread->path()}/replies", $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }
