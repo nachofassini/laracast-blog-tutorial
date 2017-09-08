@@ -20,9 +20,16 @@ class Threads extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Channel $channel)
     {
-        $threads = Thread::all();
+        $threads = Thread::query();
+
+        if ($channel->exists) {
+            $threads->where('channel_id', $channel->id);
+        }
+
+        $threads = $threads->get();
+
         return view('threads.index', compact('threads'));
     }
 
