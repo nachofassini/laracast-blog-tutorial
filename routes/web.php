@@ -23,5 +23,5 @@ Route::get('/threads', 'Threads@index')->name('threads.index');
 Route::get('/threads/create', 'Threads@create')->name('threads.create');
 Route::get('/threads/{channel}/{thread}', 'Threads@show')->name('channel.threads.show');
 Route::post('/threads', 'Threads@store')->name('threads.store');
-Route::get('/threads/{channel}', 'Threads@index')->name('threads');
+Route::get('/threads/{channel}', 'Threads@index')->name('threads.by_channel');
 Route::post('/threads/{channel}/{thread}/replies', 'Replies@store');

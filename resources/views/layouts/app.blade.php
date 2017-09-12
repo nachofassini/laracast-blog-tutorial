@@ -36,12 +36,13 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="/threads">All threads</a></li>
+                        <li><a href="{{ route('threads.index') }}">All threads</a></li>
+                        <li><a href="{{ route('threads.create') }}">New Thread</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Channels</a>
                             <ul class="dropdown-menu">
                                 @foreach(\App\Channel::orderBy('name')->get() as $channel)
-                                    <li><a href="{{ route('threads.index', $channel->slug) }}">{{ $channel->name }}</a></li>
+                                    <li><a href="{{ route('threads.by_channel', $channel->slug) }}">{{ $channel->name }}</a></li>
                                 @endforeach
                             </ul>
                         </li>
