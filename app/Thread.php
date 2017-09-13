@@ -3,11 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class Thread extends Model
 {
     protected $guarded = [];
+
+    protected $withCount = ['replies'];
 
     public function addReply($reply)
     {
@@ -45,18 +46,6 @@ class Thread extends Model
         }
         return $query->where('channel_id', $channel);
     }
-
-    /*public function scopeFilter($query, Request $request, Channel $channel = null)
-    {
-        if ($request->has('by') && $user = User::byName($request->by)->first()) {
-            $query->byUser($user->id);
-        }
-
-        if ($channel->exists) {
-            $query->byChannel($channel->id);
-        }
-        return $query;
-    }*/
 
     public function scopeFilter($query, $filters)
     {
