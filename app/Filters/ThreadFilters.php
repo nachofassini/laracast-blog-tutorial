@@ -6,7 +6,7 @@ use App\User;
 
 class ThreadFilters extends Filter
 {
-    protected $filters = ['by'];
+    protected $filters = ['by', 'popular'];
 
     /**
      * @param $username
@@ -17,5 +17,11 @@ class ThreadFilters extends Filter
         $user = User::byName($username)->first();
 
         return $this->builder->byUser($user->id);
+    }
+
+    public function popular()
+    {
+        $this->builder->getQuery()->orders = null;
+        return $this->builder->byPopularity();
     }
 }

@@ -63,4 +63,9 @@ class Thread extends Model
         }
         return $query->where('user_id', $user);
     }
+
+    public function scopeByPopularity($query)
+    {
+        return $query->orderBy('replies_count', 'desc');
+    }
 }
