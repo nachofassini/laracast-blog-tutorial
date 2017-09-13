@@ -36,10 +36,22 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ route('threads.index') }}">All threads</a></li>
+                        @if(auth()->check())
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Threads <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ route('threads.index') }}">All threads</a></li>
+                                    <li><a href="{{ route('threads.index') }}?by={{ auth()->user()->name }}">My threads</a></li>
+                                </ul>
+                            </li>
+                        @else
+                            <li><a href="{{ route('threads.index') }}">All threads</a></li>
+                        @endif
+
                         <li><a href="{{ route('threads.create') }}">New Thread</a></li>
+
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Channels</a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Channels <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 @foreach($channels as $channel)
                                     <li><a href="{{ route('threads.by_channel', $channel->slug) }}">{{ $channel->name }}</a></li>

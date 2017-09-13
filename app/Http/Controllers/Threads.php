@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Channel;
 use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -20,15 +21,9 @@ class Threads extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel)
+    public function index(Request $request, Channel $channel)
     {
-        $threads = Thread::query();
-
-        if ($channel->exists) {
-            $threads->where('channel_id', $channel->id);
-        }
-
-        $threads = $threads->get();
+        $threads = Thread::filter($request, $channel)->get();
 
         return view('threads.index', compact('threads'));
     }

@@ -26,4 +26,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Search user by name
+     * @param $query
+     * @param $name
+     * @return mixed
+     */
+    public function scopeByName($query, $name)
+    {
+        return $query->where('name', $name);
+    }
 }

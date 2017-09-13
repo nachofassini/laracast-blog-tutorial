@@ -15,9 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //View::share('channels', Channel::orderBy('name')->get());
         View::composer('*', function ($view) {
-            $view->with('channels', \App\Channel::orderBy('name')->get());
+            $view->with('channels', Channel::orderBy('name')->get());
         });
     }
 
