@@ -10,6 +10,8 @@ class Thread extends Model
 
     protected $withCount = ['replies'];
 
+    protected $with = ['channel'];
+
     public function addReply($reply)
     {
         $this->replies()->create($reply);
@@ -37,7 +39,9 @@ class Thread extends Model
 
     public function replies()
     {
-        return $this->hasMany(Reply::class);
+        return $this->hasMany(Reply::class)
+            ->withCount('favorites')
+            ->with('owner');
     }
 
     /**

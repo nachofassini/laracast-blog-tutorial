@@ -26,7 +26,7 @@ class Threads extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
-        $threads = $this->getThreads($channel, $filters)->getRelations();
+        $threads = $this->getThreads($channel, $filters);
 
         if (request()->wantsJson()) {
             return $threads;
@@ -116,12 +116,6 @@ class Threads extends Controller
         //
     }
 
-
-    public function getRelations($builder)
-    {
-        return $builder;
-    }
-
     /**
      * @param Channel $channel
      * @param ThreadFilters $filters
@@ -134,8 +128,6 @@ class Threads extends Controller
         if ($channel->exists) {
             $threads->byChannel($channel);
         }
-
-        $this->load('replies.owner');
 
         return $threads->get();
     }

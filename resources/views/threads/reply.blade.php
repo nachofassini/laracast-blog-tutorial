@@ -7,14 +7,14 @@
         <form action="{{ route('reply.favorite', $reply->id) }}" method="POST">
             {{ csrf_field() }}
             <button class="btn btn-link"
-                    title="{{ $reply->favorites()->count() }} {{ str_plural('Favorite', $reply->favorites()->count()) }}"
+                    title="{{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}"
                     {{ $reply->isFavorited() ? 'disabled' : '' }}>
                 @if($reply->isFavorited())
                     <i class="fa fa-star"></i>
                 @else
                     <i class="fa fa-star-o"></i>
                 @endif
-                <span class="badge">{{ $reply->favorites()->count() }}</span>
+                <span class="badge">{{ $reply->favorites_count }}</span>
             </button>
         </form>
     </div>
