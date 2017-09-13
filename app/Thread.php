@@ -46,7 +46,7 @@ class Thread extends Model
         return $query->where('channel_id', $channel);
     }
 
-    public function scopeFilter($query, Request $request, Channel $channel = null)
+    /*public function scopeFilter($query, Request $request, Channel $channel = null)
     {
         if ($request->has('by') && $user = User::byName($request->by)->first()) {
             $query->byUser($user->id);
@@ -56,6 +56,11 @@ class Thread extends Model
             $query->byChannel($channel->id);
         }
         return $query;
+    }*/
+
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
     }
 
     /**
