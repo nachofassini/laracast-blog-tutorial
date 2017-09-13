@@ -15,6 +15,11 @@ class Thread extends Model
         $this->replies()->create($reply);
     }
 
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favorited');
+    }
+
     public function channel()
     {
         return $this->belongsTo(Channel::class);

@@ -8,6 +8,22 @@ class Reply extends Model
 {
     protected $guarded = [];
 
+    public function favorite()
+    {
+        $attributes = ['user_id' => auth()->id()];
+
+        if (!$this->favorites()->where($attributes)->exists()) {
+            return $this->favorites()->create($attributes);
+        }
+
+        return false;
+    }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favorited');
+    }
+
     public function thread()
     {
         return $this->belongsTo(Thread::class);
