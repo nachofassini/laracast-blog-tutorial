@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading level">
         <div class="flex">
-            <a href="#">{{ $reply->owner->name }}</a>
+            <a href="{{ route('profiles.show', $reply->owner) }}">{{ $reply->owner->name }}</a>
             said {{ $reply->created_at->diffForHumans() }}...
         </div>
         <form action="{{ route('reply.favorite', $reply->id) }}" method="POST">

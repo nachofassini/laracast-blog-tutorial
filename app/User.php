@@ -27,6 +27,20 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class)
+            ->orderBy('created_at', 'DESC');
+    }
+
     /**
      * Search user by name
      * @param $query
