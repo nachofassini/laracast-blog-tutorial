@@ -113,6 +113,8 @@ class Threads extends Controller
      */
     public function destroy(Thread $thread)
     {
+        $this->authorize('update', $thread);
+
         $thread->delete();
 
         return redirect()->route('threads.index');

@@ -14,7 +14,7 @@
         @foreach($threads as $thread)
           <div class="panel panel-default">
             <div class="panel-heading level">
-              <span class="flex">{{ $thread->title }}</span>
+              <a href="{{ $thread->path() }}" class="flex">{{ $thread->title }}</a>
               <span>posted {{ $thread->created_at->diffForHumans() }}</span>
             </div>
             <div class="panel-body">{{ $thread->body }}</div>

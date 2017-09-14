@@ -8,7 +8,7 @@
         <div class="clearfix"></div>
         <br>
 
-        @foreach($threads as $thread)
+        @forelse($threads as $thread)
           <div class="panel panel-default">
             <div class="panel-heading">
               <div class="level">
@@ -25,7 +25,11 @@
 
             <div class="panel-body">{{ $thread->body }}</div>
           </div>
-        @endforeach
+        @empty
+          <div class="alert alert-info">
+              There are no relevant results at this time
+          </div>
+        @endforelse
       </div>
     </div>
   </div>
