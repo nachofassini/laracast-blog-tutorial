@@ -6,8 +6,19 @@
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="{{ route('profiles.show', $thread->creator) }}">{{ $thread->creator->name }}</a> posted:
-                        {{ $thread->title }}
+                        <div class="level">
+                            <div class="flex">
+                                <a href="{{ route('profiles.show', $thread->creator) }}">{{ $thread->creator->name }}</a> posted:
+                                {{ $thread->title }}
+                            </div>
+                            @if(auth()->check())
+                                <form action="{{ route('threads.destroy', $thread) }}" method="POST">
+                                    {{ method_field('DELETE') }}
+                                    {{ csrf_field() }}
+                                    <button class="btn btn-link"><i class="fa fa-trash-o"></i></button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                     <div class="panel-body">{{ $thread->body }}</div>
                 </div>

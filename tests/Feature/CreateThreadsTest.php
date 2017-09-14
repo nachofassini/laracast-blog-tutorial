@@ -73,4 +73,33 @@ class CreateThreadsTest extends TestCase
             ->signIn()
             ->post('threads', $thread);
     }
+
+    public function testGuestsCannotDeleteThreads()
+    {
+        $this->withExceptionHandling();
+
+        $thread = create(\App\Thread::class);
+
+        $this->delete(route('threads.destroy', $thread))
+            ->assertRedirect(route('login'));
+    }
+
+    public function testAThreadCanBeDeleted()
+    {
+        $this->signIn();
+
+        $thread = create(\App\Thread::class);
+        $reply = create(\App\Reply::class, ['thread_id' => $thread->id]);
+
+        $this->delete(route('threads.destroy', $thread))
+            ->assertRedirect(route('threads.index'));
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+    }
+
+    public function testThreadsMayOnlyBeDeletedByAuthorizedUsers()
+    {
+        $this->markTestIncomplete();
+    }
 }

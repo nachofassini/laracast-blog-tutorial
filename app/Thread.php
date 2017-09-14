@@ -8,9 +8,18 @@ class Thread extends Model
 {
     protected $guarded = [];
 
+    protected $with = ['channel', 'creator'];
+
     protected $withCount = ['replies'];
 
-    protected $with = ['channel', 'creator'];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($thread) {
+            $thread->replies()->delete();
+        });
+    }
 
     public function addReply($reply)
     {
