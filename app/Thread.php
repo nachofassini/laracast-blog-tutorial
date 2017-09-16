@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordsActivity;
+
     protected $guarded = [];
 
     protected $with = ['channel', 'creator'];
@@ -26,11 +29,6 @@ class Thread extends Model
         $this->replies()->create($reply);
     }
 
-    public function favorites()
-    {
-        return $this->morphMany(Favorite::class, 'favorited');
-    }
-
     public function channel()
     {
         return $this->belongsTo(Channel::class);
@@ -39,6 +37,11 @@ class Thread extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favorited');
     }
 
     public function path()
