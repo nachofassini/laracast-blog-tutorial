@@ -34,6 +34,8 @@ class ProfileTest extends TestCase
      */
     public function aUserProfileMustShowTheirCreatedThreads()
     {
+        $this->signIn($this->user);
+
         $userThread = create(\App\Thread::class, ['user_id' => $this->user->id]);
         $anotherUserThread = create(\App\Thread::class, []);
 

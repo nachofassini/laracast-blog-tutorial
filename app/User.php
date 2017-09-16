@@ -32,7 +32,7 @@ class User extends Authenticatable
         return 'name';
     }
 
-    public function activities()
+    public function activity()
     {
         return $this->hasMany(Activity::class);
     }
