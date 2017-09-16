@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Models\Favoritable;
+use App\Models\Traits\Favoritable;
 use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 

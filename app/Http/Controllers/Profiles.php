@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Activity;
 use App\User;
 
 class Profiles extends Controller
 {
     public function show(User $profileUser)
     {
-        $threads = $profileUser->threads()->paginate();
+        $activities = Activity::feed($profileUser);
 
-        return view('profiles.show', compact('profileUser','threads'));
+        return view('profiles.show', compact('profileUser', 'activities'));
     }
 }
