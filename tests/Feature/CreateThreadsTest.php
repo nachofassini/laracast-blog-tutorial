@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use App\Favorite;
 use Illuminate\Auth\AuthenticationException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -96,6 +97,16 @@ class CreateThreadsTest extends TestCase
 
         $thread = create(\App\Thread::class, ['user_id' => $user->id]);
         $reply = create(\App\Reply::class, ['thread_id' => $thread->id]);
+        Favorite::create([
+            'user_id' => auth()->id(),
+            'favorited_id' => $thread->id,
+            'favorited_type' => get_class($thread)
+        ]);
+        Favorite::create([
+            'user_id' => auth()->id(),
+            'favorited_id' => $reply->id,
+            'favorited_type' => get_class($reply)
+        ]);
 
         $this->delete(route('threads.destroy', $thread))
             ->assertRedirect(route('threads.index'));

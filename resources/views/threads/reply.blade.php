@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div id="reply-{{ $reply->id }}" class="panel panel-default">
     <div class="panel-heading level">
         <div class="flex">
             <a href="{{ route('profiles.show', $reply->owner) }}">{{ $reply->owner->name }}</a>
