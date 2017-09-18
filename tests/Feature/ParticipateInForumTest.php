@@ -45,6 +45,40 @@ class ParticipateInForumTest extends TestCase
             ->assertSessionHasErrors('body');
     }
 
+    public function testUnauthorizedUsersCantUpdateReplies()
+    {
+        $this->withExceptionHandling();
+
+        $reply = create(\App\Reply::class);
+
+        $updatedBody = 'You been changed, fool.';
+        $this->patch(route('replies.update', $reply), ['body' => $updatedBody])
+            ->assertRedirect(route('login'));
+
+        $this->signIn();
+
+        $this->delete(route('replies.destroy', $reply))
+            ->assertSee('unauthorized');
+    }
+
+    public function testAuthorizedUsersCanUpdateReplies()
+    {
+        $this->signIn();
+
+        $reply = create(\App\Reply::class, [
+            'user_id' => auth()->id()
+        ]);
+
+        $updatedBody = 'You been changed, fool.';
+        $this->patch(route('replies.update', $reply), ['body' => $updatedBody])
+            ->assertStatus(200);
+
+        $this->assertDatabaseHas('replies', [
+            'id' => $reply->id,
+            'body' => $updatedBody
+        ]);
+    }
+
     public function testUnauthorizedUsersCantDeleteReplies()
     {
         $this->withExceptionHandling();

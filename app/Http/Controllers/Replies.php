@@ -80,12 +80,20 @@ class Replies extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param Reply $reply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+
+        $this->validate($request, [
+            'body' => 'required|min:5'
+        ]);
+
+        $reply->update($request->only('body'));
+
+        return response()->json($reply);
     }
 
     /**
