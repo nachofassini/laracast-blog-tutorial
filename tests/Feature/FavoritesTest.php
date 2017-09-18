@@ -61,4 +61,18 @@ class FavoritesTest extends TestCase
 
         $this->assertCount(1, $this->reply->favorites);
     }
+
+    /**
+     * @test
+     */
+    function anAuthenticatedUserCanUnfavoriteAnyReply()
+    {
+        $this->signIn();
+
+        $this->reply->favorite();
+
+        $this->delete("replies/{$this->reply->id}/favorites");
+
+        $this->assertCount(0, $this->reply->favorites);
+    }
 }

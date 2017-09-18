@@ -19,6 +19,8 @@ class Reply extends Model
         });
     }
 
+    protected $appends = ['favoritesCount', 'isFavorited'];
+
     protected $guarded = [];
 
     protected $with = ['owner', 'favorites'];
