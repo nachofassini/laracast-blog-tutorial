@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -90,11 +91,18 @@ class Replies extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param Reply $reply
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+
+        $returnPath = $reply->thread->path();
+
+        $reply->delete();
+
+        return redirect($returnPath)
+            ->withFlash('The reply has been deleted!');
     }
 }

@@ -4,6 +4,13 @@
             <a href="{{ route('profiles.show', $reply->owner) }}">{{ $reply->owner->name }}</a>
             said {{ $reply->created_at->diffForHumans() }}...
         </div>
+        @can('update', $reply)
+            <form action="{{ route('replies.destroy', $reply) }}" method="POST">
+                {{ method_field('DELETE') }}
+                {{ csrf_field() }}
+                <button class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+            </form>
+        @endcan
         <form action="{{ route('reply.favorite', $reply->id) }}" method="POST">
             {{ csrf_field() }}
             <button class="btn btn-link"

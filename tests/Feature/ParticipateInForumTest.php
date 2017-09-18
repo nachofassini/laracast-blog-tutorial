@@ -44,4 +44,53 @@ class ParticipateInForumTest extends TestCase
             ->post("{$thread->path()}/replies", $reply->toArray())
             ->assertSessionHasErrors('body');
     }
+
+    public function testUnauthorizedUsersCantDeleteReplies()
+    {
+        $this->withExceptionHandling();
+
+        $reply = create(\App\Reply::class);
+
+        $this->delete(route('replies.destroy', $reply))
+            ->assertRedirect(route('login'));
+
+        $this->signIn();
+
+        $this->delete(route('replies.destroy', $reply))
+            ->assertSee('unauthorized');
+    }
+
+    public function testAuthorizedUsersCanDeleteReplies()
+    {
+        $this->withExceptionHandling()->signIn();
+
+        $reply = create(\App\Reply::class, [
+            'user_id' => auth()->id()
+        ]);
+
+        $thread = $reply->thread;
+
+        $this->delete(route('replies.destroy', $reply))
+            ->assertStatus(302)
+            ->assertRedirect($thread->path());
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    public function testAdminUsersCanDeleteReplies()
+    {
+        $this->withExceptionHandling()->signIn($user = create(\App\User::class, ['name' => 'nachofassini']));
+
+        $reply = create(\App\Reply::class, [
+            'user_id' => auth()->id()
+        ]);
+
+        $thread = $reply->thread;
+
+        $this->delete(route('replies.destroy', $reply))
+            ->assertStatus(302)
+            ->assertRedirect($thread->path());
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
 }
