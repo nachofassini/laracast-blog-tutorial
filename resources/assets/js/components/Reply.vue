@@ -28,7 +28,16 @@
                     this.form = response.data;
                     flash('Updated!');
                 }).catch(error => alert(error.response));
-            }
+            },
+
+            destroy() {
+                axios.delete('/replies/' + this.attributes.id)
+                    .then(response => {
+                        $(this.$el).fadeOut(300, () => {
+                            flash('Your reply has been deleted!')
+                        });
+                    });
+            },
         },
     }
 </script>

@@ -35,12 +35,8 @@
 
     @can('update', $reply)
       <div class="panel-footer">
-        <form action="{{ route('replies.destroy', $reply) }}" method="POST">
-          {{ method_field('DELETE') }}
-          {{ csrf_field() }}
-          <button type="button" class="btn btn-primary btn-xs mr-1" @click="edit">Edit</button>
-          <button class="btn btn-danger btn-xs">Delete</button>
-        </form>
+        <button type="button" class="btn btn-primary btn-xs" @click="edit">Edit</button>
+        <button type="button" class="btn btn-danger btn-xs" @click="destroy">Delete</button>
       </div>
     @endcan
   </div>
