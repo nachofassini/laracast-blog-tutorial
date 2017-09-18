@@ -8,10 +8,20 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- Signed In -->
+    <meta name="signed-in" content="{{ \Auth::check() }}">
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    <script>
+        window.App = {!! json_encode([
+            'signedIn' => \Auth::check(),
+            'user' => auth()->user(),
+        ]) !!}
+    </script>
 
     <style>
         body {
