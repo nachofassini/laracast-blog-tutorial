@@ -34,21 +34,11 @@
             <div class="panel-body">{{ $thread->body }}</div>
           </div>
 
-          <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
-
-          @if(auth()->check())
-            <form method="POST" action="{{ $thread->path() . '/replies' }}">
-              {{ csrf_field() }}
-              <div class="form-group">
-                <textarea placeholder="Leave your reply" name="body" class="form-control" rows="5"></textarea>
-              </div>
-
-              <button class="btn btn-default">Post</button>
-            </form>
-          @else
-            <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to participate in this discussion.
-            </p>
-          @endif
+          <replies :thread="{{ $thread }}"
+                   :data="{{ $thread->replies }}"
+                   @added="repliesCount++"
+                   @removed="repliesCount--">
+          </replies>
         </div>
 
         <div class="col-md-4">

@@ -65,6 +65,10 @@ class Threads extends Controller
             'user_id' => auth()->id(),
         ]);
 
+        if ($request->wantsJson()) {
+            return response()->json(['created'], 201);
+        }
+
         return redirect($thread->path())
             ->withFlash('Your thread has been published.');
     }

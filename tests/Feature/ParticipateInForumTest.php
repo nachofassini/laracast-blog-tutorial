@@ -27,7 +27,10 @@ class ParticipateInForumTest extends TestCase
         $reply = make(\App\Reply::class);
 
         $this->signIn()
-            ->post("{$thread->path()}/replies", $reply->toArray());
+            ->json('post', "{$thread->path()}/replies", $reply->toArray())
+            ->assertJsonFragment([
+                'body' => $reply->body,
+            ]);
 
         $this->get("{$thread->path()}")
             ->assertSee($reply->body);
