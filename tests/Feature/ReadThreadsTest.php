@@ -45,8 +45,13 @@ class ReadThreadsTest extends TestCase
     {
         $reply = create(\App\Reply::class, ['thread_id' => $this->thread->id]);
 
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas(
+            'replies',
+            [
+                'thread_id' => $this->thread->id,
+                'body' => $reply->body,
+            ]
+        );
     }
 
     /**
@@ -93,6 +98,19 @@ class ReadThreadsTest extends TestCase
         $response = $this->getJson('threads?popular=1')->json();
 
         $this->assertEquals([5, 3, 0], array_column($response, 'replies_count'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldListThreadsUnanswered()
+    {
+        $threadWithReply = create(\App\Thread::class);
+        create(\App\Reply::class, ['thread_id' => $threadWithReply->id]);
+
+        $response = $this->getJson('threads?unanswered=1')->json();
+
+        $this->assertCount(1, $response);
     }
 
     /**

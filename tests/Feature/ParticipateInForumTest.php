@@ -32,8 +32,13 @@ class ParticipateInForumTest extends TestCase
                 'body' => $reply->body,
             ]);
 
-        $this->get("{$thread->path()}")
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas(
+            'replies',
+            [
+                'thread_id' => $thread->id,
+                'body' => $reply->body,
+            ]
+        );
     }
 
 
