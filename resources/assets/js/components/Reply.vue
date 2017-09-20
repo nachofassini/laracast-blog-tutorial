@@ -3,7 +3,7 @@
         <div class="panel-heading level">
             <div class="flex">
                 <a :href="'/profiles/' + data.owner.name" v-text="data.owner.name"></a>
-                said {{ data.created_at }}...
+                said {{ data.created_at | ago }}
             </div>
 
             <div v-if="signedIn">
@@ -32,6 +32,7 @@
 
 <script>
     import Favorite from './Favorite.vue';
+    import moment from 'moment';
 
     export default {
         components: { Favorite },
@@ -56,6 +57,12 @@
             canUpdate() {
                 return this.authorize(user => this.data.user_id == user.id);
             },
+        },
+
+        filters: {
+            ago: function (date) {
+                return moment(date).fromNow() + '...';
+            }
         },
 
         methods: {

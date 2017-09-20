@@ -1,12 +1,14 @@
 <template>
     <div>
-        <div v-for="(reply, index) in items">
+        <div v-for="(reply, index) in items" :key="reply.id">
             <reply :data="reply"
                    @deleted="remove(index)"
             ></reply>
         </div>
 
-        <reply-form :endpoint="'/threads/' + this.thread.channel.slug + '/' + thread.id + '/replies'"
+        <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+
+        <reply-form :endpoint="url"
                     @created="add"
         ></reply-form>
     </div>
@@ -15,39 +17,45 @@
 <script>
     import Reply from './Reply.vue';
     import ReplyForm from './ReplyForm.vue';
+    import collection from '../mixins/collection';
 
     export default {
         name: 'replies',
 
         props: {
-            data: {},
             thread: {required: true}
         },
+
+        mixins: [collection],
 
         components: {Reply, ReplyForm},
 
         data() {
             return {
-                items: this.data,
+                dataSet: false,
+                url: '/threads/' + this.thread.channel.slug + '/' + this.thread.id + '/replies'
             }
         },
 
+        created() {
+            this.fetch();
+        },
+
         methods: {
-            add(item) {
-                this.items.push(item);
+            fetch(page) {
+                if (!page) {
+                    let query = location.search.match(/page=(\d+)/);
 
-                flash('Your reply has been left!');
+                    page = query ? query[1] : 1;
+                }
 
-                this.$emit('added');
+                axios.get(this.url + '?page=' + page).then(this.refresh);
             },
 
-            remove(index) {
-                this.items.splice(index, 1);
-
-                flash('Your reply was deleted!');
-
-                this.$emit('removed');
-            }
+            refresh({data}) {
+                this.dataSet = data;
+                this.items = data.data;
+            },
         },
     }
 </script>

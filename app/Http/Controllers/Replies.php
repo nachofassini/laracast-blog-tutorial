@@ -10,7 +10,7 @@ class Replies extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('index');
     }
 
     /**
@@ -18,9 +18,11 @@ class Replies extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($channelSlug, Thread $thread)
     {
-        //
+        $replies = $thread->replies()->latest()->paginate(20);
+
+        return response()->json($replies);
     }
 
     /**

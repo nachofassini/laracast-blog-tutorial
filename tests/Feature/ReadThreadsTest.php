@@ -94,4 +94,20 @@ class ReadThreadsTest extends TestCase
 
         $this->assertEquals([5, 3, 0], array_column($response, 'replies_count'));
     }
+
+    /**
+     * @test
+     */
+    public function aUserCanRequestRepliesForAGivenThread()
+    {
+        $reply = create(\App\Reply::class, ['thread_id' => $this->thread->id]);
+
+        $this->getJson($this->thread->path() . '/replies')
+            ->assertJson([
+                'data' => [
+                    $reply->toArray(),
+                ],
+                'total' => 1
+            ]);
+    }
 }
