@@ -1,15 +1,10 @@
 <template>
     <div v-if="signedIn">
-        <button v-if="!subscribed"
-                type="button"
-                class="btn btn-default center-block"
-                @click="subscribe"
-        >Subscribe</button>
-        <button v-else
-                type="button"
-                class="btn btn-primary center-block"
-                @click="unsubscribe"
-        >Unsubscribe</button>
+        <button type="button"
+                :class="classes"
+                @click="toggle"
+                v-text="subscribed ? 'Unsubscribe' : 'Subscribe'"
+        ></button>
     </div>
 </template>
 
@@ -30,9 +25,17 @@
             signedIn() {
                 return window.App.signedIn;
             },
+
+            classes() {
+                return ['btn', this.subscribed ? 'btn-primary' : 'btn-default'];
+            }
         },
 
         methods: {
+            toggle() {
+                return this.subscribed ? this.unsubscribe() : this.subscribe();
+            },
+
             subscribe() {
                 axios.post(this.endpoint)
                     .then(response => {
