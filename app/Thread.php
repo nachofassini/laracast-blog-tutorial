@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, HasSubscriptions;
 
     protected $guarded = [];
 

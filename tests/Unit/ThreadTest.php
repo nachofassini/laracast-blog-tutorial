@@ -52,6 +52,9 @@ class ThreadTest extends TestCase
         $this->assertInstanceOf(\App\User::class, $this->thread->creator);
     }
 
+    /**
+     * @test
+     */
     public function testItCanAddAReply()
     {
         $reply = create(\App\Reply::class);
@@ -62,5 +65,42 @@ class ThreadTest extends TestCase
         ]);
 
         $this->assertCount(1, $this->thread->replies);
+    }
+
+
+    /**
+     * @test
+     */
+    public function testAThreadCanBeSubscribedTo()
+    {
+        $this->signIn($user = create(\App\User::class));
+
+        $this->thread->subscribe($user->id);
+
+        $this->assertCount(1, $user->fresh()->subscriptionsList);
+        $this->assertDatabaseHas(
+            'subscriptions',
+            [
+                'subscribed_id' => $this->thread->id,
+                'subscribed_type' => get_class($this->thread),
+                'user_id' => auth()->id(),
+            ]
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function testAThreadCanBeUnSubscribedFrom()
+    {
+        $this->signIn($user = create(\App\User::class));
+
+        $this->thread->subscribe($user->id);
+
+        $this->assertCount(1, $user->fresh()->subscriptionsList);
+
+        $this->thread->unSubscribe($user->id);
+
+        $this->assertCount(0, $user->fresh()->subscriptionsList);
     }
 }

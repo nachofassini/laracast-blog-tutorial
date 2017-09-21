@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Models\Traits\HasSubscriptions;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasSubscriptions;
 
     /**
      * The attributes that are mass assignable.
@@ -38,15 +39,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function threads()
-    {
-        return $this->hasMany(Thread::class)
-            ->orderBy('created_at', 'DESC');
-    }
-
-    /**
      * Search user by name
      * @param $query
      * @param $name
@@ -55,5 +47,22 @@ class User extends Authenticatable
     public function scopeByName($query, $name)
     {
         return $query->where('name', $name);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptionsList()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class)
+            ->orderBy('created_at', 'DESC');
     }
 }

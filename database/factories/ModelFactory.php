@@ -41,7 +41,7 @@ $factory->define(App\Thread::class, function ($faker) {
             return factory(\App\Channel::class)->create()->id;
         },
         'title' => $faker->sentence,
-        'body' => $faker->paragraph
+        'body' => $faker->paragraphs(rand(3, 5), true)
     ];
 });
 
