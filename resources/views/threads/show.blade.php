@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  <thread-view :initial-replies-count="{{ $thread->replies_count }}" inline-template>
+  <thread-view :data="{{ $thread }}" inline-template>
     <div class="container">
       <div class="row">
         <div class="col-md-8">
@@ -48,6 +48,12 @@
                 <a href="{{ route('threads.index') }}?by={{ $thread->creator->name }}">{{ $thread->creator->name }}</a>
                 and currently it has <span v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
               </p>
+
+              <subscriptions :endpoint="'/threads/' + this.thread.id + '/subscribe'"
+                            :is-subscribed="thread.isSubscribed"
+                            @subscribed="subscribe"
+                            @unsubscribed="unsubscribe"
+              ></subscriptions>
             </div>
           </div>
         </div>

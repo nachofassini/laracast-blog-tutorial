@@ -22,6 +22,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/threads', 'Threads@index')->name('threads.index');
 Route::get('/threads/create', 'Threads@create')->name('threads.create');
 Route::delete('/threads/{thread}', 'Threads@destroy')->name('threads.destroy');
+
+Route::post('/threads/{thread}/subscribe', 'ThreadsSubscriptions@subscribe')->name('threads.subscribe');
+Route::delete('/threads/{thread}/subscribe', 'ThreadsSubscriptions@unSubscribe')->name('threads.unsubscribe');
+
 Route::get('/threads/{channel}/{thread}', 'Threads@show')->name('channel.threads.show');
 Route::post('/threads', 'Threads@store')->name('threads.store');
 Route::get('/threads/{channel}', 'Threads@index')->name('threads.by_channel');

@@ -16,6 +16,8 @@ class Thread extends Model
 
     protected $withCount = ['replies'];
 
+    protected $appends = ['isSubscribed'];
+
     protected static function boot()
     {
         parent::boot();
