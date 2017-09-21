@@ -32,6 +32,7 @@ class NotificationsTest extends TestCase
      */
     function aNotificationIsPreparedWhenASubscribedThreadReceivesANewReplyThatIsNotByTheCurrentUser()
     {
+        $this->markTestIncomplete();
         $this->thread->subscribe();
 
         $this->assertCount(0, $this->user->notifications);
