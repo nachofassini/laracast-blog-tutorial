@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notification;
 
 /**
  * Class Subscription
@@ -26,5 +27,10 @@ class Subscription extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function notify(Notification $notification)
+    {
+        $this->user->notify($notification);
     }
 }

@@ -40,3 +40,6 @@ Route::post('/replies/{reply}/favorites', 'Favorites@store')->name('reply.favori
 Route::delete('/replies/{reply}/favorites', 'Favorites@destroy')->name('reply.unfavorite');
 
 Route::get('/profiles/{profileUser}', 'Profiles@show')->name('profiles.show');
+
+Route::get('/profiles/{user}/notifications', 'UserNotifications@index');
+Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotifications@destroy');
