@@ -3,22 +3,28 @@
 namespace App\Models\Traits;
 
 use App\Subscription;
+use App\User;
 
 trait HasSubscriptions
 {
     protected static function bootFavoritable()
     {
-        static::deleting(function($model) {
+        static::deleting(function ($model) {
             $model->subscriptions->each->delete();
         });
     }
 
-    public function subscribe($userId = null)
+    public function subscribe($user = null)
     {
-        $attributes = ['user_id' => $userId ?: auth()->id()];
+        if ($user instanceof User) {
+            $user = $user->id;
+        }
+
+        $attributes = ['user_id' => $user ?: auth()->id()];
 
         if (!$this->subscriptions()->where($attributes)->exists()) {
-            return $this->subscriptions()->create($attributes);
+            $this->subscriptions()->create($attributes);
+            return $this;
         }
         return false;
     }
@@ -28,7 +34,8 @@ trait HasSubscriptions
         $attributes = ['user_id' => $userId ?: auth()->id()];
 
         if ($this->subscriptions()->where($attributes)->exists()) {
-            return $this->subscriptions()->where($attributes)->get()->each->delete();
+            $this->subscriptions()->where($attributes)->get()->each->delete();
+            return $this;
         }
         return false;
     }

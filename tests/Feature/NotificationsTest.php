@@ -32,7 +32,7 @@ class NotificationsTest extends TestCase
      */
     function aNotificationIsPreparedWhenASubscribedThreadReceivesANewReplyThatIsNotByTheCurrentUser()
     {
-        $this->markTestIncomplete();
+        //$this->markTestIncomplete();
         $this->thread->subscribe();
 
         $this->assertCount(0, $this->user->notifications);
@@ -45,7 +45,7 @@ class NotificationsTest extends TestCase
         $this->assertCount(0, $this->user->fresh()->notifications);
 
         $this->thread->addReply([
-            'user_id' => create(User::class),
+            'user_id' => create(User::class)->id,
             'body' => 'Some other reply here.'
         ]);
 
