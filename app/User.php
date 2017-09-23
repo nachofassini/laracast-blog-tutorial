@@ -65,4 +65,9 @@ class User extends Authenticatable
         return $this->hasMany(Thread::class)
             ->orderBy('created_at', 'DESC');
     }
+
+    public function visitedThreadCacheKey(Thread $thread)
+    {
+        return sprintf("users.%s.visits.%s", $this->id, $thread->id);
+    }
 }

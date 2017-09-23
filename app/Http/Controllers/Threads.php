@@ -81,6 +81,8 @@ class Threads extends Controller
      */
     public function show($channelSlug, Thread $thread)
     {
+        $thread->visited();
+
         return view('threads.show', compact('thread'));
     }
 

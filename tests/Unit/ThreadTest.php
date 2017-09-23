@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Reply;
 use App\User;
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\Notifications\ThreadWasUpdated;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -128,5 +129,19 @@ class ThreadTest extends TestCase
         $this->thread->unSubscribe($user->id);
 
         $this->assertCount(0, $user->fresh()->subscriptionsList);
+    }
+
+    /**
+     * @test
+     */
+    public function testAThreadCanCheckIfTheAuthenticatedUserHasReadAllReplies()
+    {
+        $this->signIn();
+
+        $this->assertTrue($this->thread->hasUpdatesFor());
+
+        $this->thread->visited();
+
+        $this->assertFalse($this->thread->hasUpdatesFor());
     }
 }

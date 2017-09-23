@@ -5,6 +5,7 @@ namespace App;
 use App\Events\ThreadHasNewReply;
 use App\Models\Traits\HasSubscriptions;
 use App\Models\Traits\RecordsActivity;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -53,6 +54,19 @@ class Thread extends Model
         return $this->morphMany(Favorite::class, 'favorited');
     }
 
+    public function hasUpdatesFor(User $user = null)
+    {
+        if (! isset($user)) {
+            if (auth()->check()) {
+                $user = auth()->user();
+            } else {
+                return false;
+            }
+        }
+
+        return $this->updated_at > cache($user->visitedThreadCacheKey($this));
+    }
+
     public function path()
     {
         return route('channel.threads.show', [$this->channel->slug, $this->id]);
@@ -97,5 +111,12 @@ class Thread extends Model
     public function scopeByPopularity($query)
     {
         return $query->orderBy('replies_count', 'desc');
+    }
+
+    public function visited()
+    {
+        if (auth()->user()) {
+            cache()->forever(auth()->user()->visitedThreadCacheKey($this), Carbon::now());
+        }
     }
 }
