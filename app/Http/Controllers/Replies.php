@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReplyRequest;
 use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class Replies extends Controller
 {
@@ -39,19 +39,11 @@ class Replies extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  ReplyRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $channelSlug, Thread $thread)
+    public function store(ReplyRequest $request, $channelSlug, Thread $thread)
     {
-        if (Gate::denies('create', new Reply)) {
-            return response()->json('You are posting too frequently. Please take a break.', 403);
-        }
-
-        $this->validate($request, [
-            'body' => 'required|min:5'
-        ]);
-
         $reply = $thread->addReply([
             'body' => $request->body,
             'user_id' => auth()->id(),

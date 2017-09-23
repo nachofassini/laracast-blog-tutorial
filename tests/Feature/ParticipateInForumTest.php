@@ -42,7 +42,6 @@ class ParticipateInForumTest extends TestCase
         );
     }
 
-
     public function testAReplyRequiresABody()
     {
         $thread = create(\App\Thread::class);
@@ -152,6 +151,6 @@ class ParticipateInForumTest extends TestCase
         $this->withExceptionHandling();
 
         $this->post("{$thread->path()}/replies", $reply->toArray())
-            ->assertStatus(403);
+            ->assertStatus(429);
     }
 }
