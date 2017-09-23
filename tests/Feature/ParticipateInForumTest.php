@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Channel;
+use App\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -134,5 +135,23 @@ class ParticipateInForumTest extends TestCase
             ->assertRedirect($thread->path());
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    public function testAUserMayNotReplyMoreThanOncePerMinute()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+        $reply = make(\App\Reply::class, [
+            'user_id' => auth()->id()
+        ]);
+
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+            ->assertStatus(201);
+
+        $this->withExceptionHandling();
+
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+            ->assertStatus(403);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class Replies extends Controller
 {
@@ -20,7 +21,7 @@ class Replies extends Controller
      */
     public function index($channelSlug, Thread $thread)
     {
-        $replies = $thread->replies()->latest()->paginate(20);
+        $replies = $thread->replies()->paginate(20);
 
         return response()->json($replies);
     }
@@ -43,6 +44,10 @@ class Replies extends Controller
      */
     public function store(Request $request, $channelSlug, Thread $thread)
     {
+        if (Gate::denies('create', new Reply)) {
+            return response()->json('You are posting too frequently. Please take a break.', 403);
+        }
+
         $this->validate($request, [
             'body' => 'required|min:5'
         ]);
@@ -52,7 +57,7 @@ class Replies extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return $reply->load('owner');;
+        return response()->json($reply->load('owner'), 201);
     }
 
     /**

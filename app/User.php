@@ -28,14 +28,19 @@ class User extends Authenticatable
         'password', 'remember_token', 'email',
     ];
 
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
     public function getRouteKeyName()
     {
         return 'name';
     }
 
-    public function activity()
+    public function lastReply()
     {
-        return $this->hasMany(Activity::class);
+        return $this->hasOne(Reply::class)->latest();
     }
 
     /**
