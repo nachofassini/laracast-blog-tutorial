@@ -44,7 +44,7 @@ class Replies extends Controller
     public function store(Request $request, $channelSlug, Thread $thread)
     {
         $this->validate($request, [
-            'body' => 'required'
+            'body' => 'required|min:5'
         ]);
 
         $reply = $thread->addReply([
@@ -52,13 +52,7 @@ class Replies extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        if ($request->wantsJson()) {
-            $reply->load('owner');
-            return response()->json($reply, 201);
-        }
-
-        return back()
-            ->withFlash('You reply has been left!');
+        return $reply->load('owner');;
     }
 
     /**
@@ -100,7 +94,7 @@ class Replies extends Controller
 
         $reply->update($request->only('body'));
 
-        return response()->json($reply);
+        return $reply;
     }
 
     /**

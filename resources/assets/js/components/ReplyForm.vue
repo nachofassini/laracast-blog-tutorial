@@ -43,8 +43,8 @@
 
                         this.$emit('created', data);
                     })
-                    .catch(errors => {
-                        console.log(errors);
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
                     });
             },
         },

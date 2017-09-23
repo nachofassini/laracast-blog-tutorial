@@ -35,7 +35,7 @@
     import moment from 'moment';
 
     export default {
-        components: { Favorite },
+        components: {Favorite},
 
         props: {
             data: {},
@@ -81,13 +81,18 @@
                     this.clean();
                     this.form = response.data;
                     flash('Updated!');
-                }).catch(error => alert(error.response));
+                }).catch(error => {
+                    flash(error.response.data, 'danger');
+                });
             },
 
             destroy() {
                 axios.delete('/replies/' + this.data.id)
                     .then(response => {
                         this.$emit('deleted', this.data.id);
+                    })
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
                     });
             },
         },
