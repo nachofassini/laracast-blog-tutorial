@@ -17,6 +17,24 @@ class Reply extends Model
 
     protected $with = ['owner', 'favorites'];
 
+    protected $userSearchPattern = '/\@([\w\-\_\.]+)/';
+
+    public function setBodyAttribute($body)
+    {
+        $this->attributes['body'] = preg_replace(
+            $this->userSearchPattern,
+            '<a href="/profiles/$1">$0</a>',
+            $body
+        );
+    }
+
+    public function mentionedUsers()
+    {
+        preg_match_all($this->userSearchPattern, $this->body, $matches);
+
+        return $matches[1];
+    }
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');

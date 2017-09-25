@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Reply;
+use App\User;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -40,5 +42,31 @@ class ReplyTest extends TestCase
         $reply->update(['created_at' => Carbon::now()->subMinutes(1)]);
 
         $this->assertFalse($reply->fresh()->wasJustPublished());
+    }
+
+    /** @test */
+    function itCanDetectAllMentionedUsersInTheBody()
+    {
+        $reply = new Reply([
+            'body' => '@JaneDoe wants to talk to @JohnDoe'
+        ]);
+
+        $this->assertEquals(['JaneDoe', 'JohnDoe'], $reply->mentionedUsers());
+    }
+
+    /**
+     * @test
+     */
+    public function itWrapsMentionedUserNamesInTheBodyWithinAnchorTags()
+    {
+        $user = create(User::class);
+
+        $reply = create(\App\Reply::class, [
+            'body' => "Given we salute @{$user->name} by his name.",
+        ]);
+
+        $this->assertEquals(
+            "Given we salute <a href=\"/profiles/{$user->name}\">@{$user->name}</a> by his name.",
+            $reply->body);
     }
 }

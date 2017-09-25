@@ -18,21 +18,11 @@ class NotifyMentionedUsers
      */
     public function handle(ThreadHasNewReply $event)
     {
-        if (sizeof($names = $this->searchMentionedUsersInReply($event->reply->body))) {
+        if (sizeof($names = $event->reply->mentionedUsers())) {
             User::whereIn('name', $names)
                 ->where('id', '!=', auth()->id())
                 ->get()
                 ->each->notify(new YouWhereMentioned($event->reply));
         }
-    }
-
-    protected function searchMentionedUsersInReply($body = '')
-    {
-        preg_match_all('/\@([\S\d\-\_]+)/', $body, $matches);
-
-        if (!empty($matches[1])) {
-            return $matches[1];
-        }
-        return [];
     }
 }

@@ -22,7 +22,7 @@
                     <button type="button" class="btn btn-xs btn-link" @click="clean">Cancel</button>
                 </form>
             </div>
-            <div v-else v-text="form.body"></div>
+            <div v-else v-html="form.body"></div>
         </div>
 
         <div class="panel-footer" v-if="canUpdate">
