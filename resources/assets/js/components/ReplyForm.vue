@@ -1,17 +1,19 @@
 <template>
     <div>
         <div v-if="signedIn">
-            <div class="form-group">
-                <textarea placeholder="Leave your reply"
-                          name="body"
-                          class="form-control"
-                          rows="5"
-                          v-model="body"
-                          required
-                ></textarea>
-            </div>
+            <form @submit.prevent="submit">
+                <div class="form-group">
+                    <textarea placeholder="Leave your reply"
+                              name="body"
+                              class="form-control"
+                              rows="5"
+                              v-model="body"
+                              required
+                    ></textarea>
+                </div>
 
-            <button class="btn btn-default" @click="submit">Post</button>
+                <button class="btn btn-default">Post</button>
+            </form>
         </div>
         <p v-else class="text-center">Please <a href="/login">sign in</a> to participate in this discussion.</p>
     </div>

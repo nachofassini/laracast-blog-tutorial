@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,6 +46,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($request->wantsJson()) {
+            if ($exception instanceof ValidationException) {
+                return response()->json('Sorry, validation failed.', 422);
+            }
+        }
+
         if ($exception instanceof ThrottleException) {
             return response()->json($exception->getMessage(), 429);
         }

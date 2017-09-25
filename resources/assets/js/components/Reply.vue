@@ -13,12 +13,14 @@
 
         <div class="panel-body">
             <div v-if="editing">
-                <div class="form-group">
-                    <textarea name="body" id="body" v-model="form.body" class="form-control" rows="5"></textarea>
-                </div>
+                <form @submit.prevent="update">
+                    <div class="form-group">
+                        <textarea name="body" id="body" v-model="form.body" class="form-control" rows="5" required></textarea>
+                    </div>
 
-                <button class="btn btn-xs btn-primary" @click="update">Update</button>
-                <button class="btn btn-xs btn-link" @click="clean">Cancel</button>
+                    <button class="btn btn-xs btn-primary">Update</button>
+                    <button type="button" class="btn btn-xs btn-link" @click="clean">Cancel</button>
+                </form>
             </div>
             <div v-else v-text="form.body"></div>
         </div>
