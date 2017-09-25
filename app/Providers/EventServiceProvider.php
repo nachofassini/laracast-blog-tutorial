@@ -14,6 +14,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         \App\Events\ThreadHasNewReply::class => [
+            \App\Listeners\NotifyMentionedUsers::class,
             \App\Listeners\NotifyThreadSubscribers::class,
         ],
     ];
