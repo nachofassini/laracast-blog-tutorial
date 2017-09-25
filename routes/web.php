@@ -30,8 +30,8 @@ Route::get('/threads/{channel}/{thread}', 'Threads@show')->name('channel.threads
 Route::post('/threads', 'Threads@store')->name('threads.store');
 Route::get('/threads/{channel}', 'Threads@index')->name('threads.by_channel');
 
-Route::get('/threads/{channel}/{thread}/replies', 'Replies@index');
-Route::post('/threads/{channel}/{thread}/replies', 'Replies@store');
+Route::get('/threads/{channel}/{thread}/replies', 'Replies@index')->name('replies.index');
+Route::post('/threads/{channel}/{thread}/replies', 'Replies@store')->name('replies.store');
 
 Route::patch('/replies/{reply}', 'Replies@update')->name('replies.update');
 Route::delete('/replies/{reply}', 'Replies@destroy')->name('replies.destroy');

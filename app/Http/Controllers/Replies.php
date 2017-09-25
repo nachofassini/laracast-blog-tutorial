@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReplyRequest;
+use App\Notifications\YouWhereMentioned;
 use App\Reply;
 use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 
 class Replies extends Controller
@@ -48,6 +50,14 @@ class Replies extends Controller
             'body' => $request->body,
             'user_id' => auth()->id(),
         ]);
+
+        preg_match_all('/\@([\S\d\-\_]+)/', $reply->body, $matches);
+        $names = $matches[1];
+
+        User::whereIn('name', $names)
+            ->where('name', '!=', auth()->user()->name)
+            ->get()
+            ->each->notify(new YouWhereMentioned($reply));
 
         return response()->json($reply->load('owner'), 201);
     }
