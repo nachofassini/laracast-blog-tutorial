@@ -137,6 +137,6 @@ class Threads extends Controller
             $threads->byChannel($channel);
         }
 
-        return $threads->get();
+        return $threads->paginate(20);
     }
 }
