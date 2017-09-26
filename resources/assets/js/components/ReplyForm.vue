@@ -5,6 +5,7 @@
                 <div class="form-group">
                     <textarea placeholder="Leave your reply"
                               name="body"
+                              id="body"
                               class="form-control"
                               rows="5"
                               v-model="body"
@@ -20,6 +21,9 @@
 </template>
 
 <script>
+    import 'jquery.caret';
+    import 'at.js';
+
     export default {
         props: {
             endpoint: {required: true},
@@ -35,6 +39,20 @@
             signedIn() {
                 return window.App.signedIn;
             },
+        },
+
+        mounted() {
+            $('#body').atwho({
+                at: "@",
+                delay: 750,
+                callbacks: {
+                    remoteFilter: function (query, callback) {
+                        $.getJSON("/users", {name: query}, function (usernames) {
+                            callback(usernames)
+                        });
+                    }
+                }
+            });
         },
 
         methods: {
