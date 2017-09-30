@@ -43,5 +43,7 @@ Route::get('/profiles/{profileUser}', 'Profiles@show')->name('profiles.show');
 
 Route::get('/profiles/{user}/notifications', 'UserNotifications@index');
 Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotifications@destroy');
+Route::post('/profile/avatar', 'Profiles@uploadAvatar')->name('user.avatar');
 
 Route::get('/users', 'Users@index')->name('users.index');
+

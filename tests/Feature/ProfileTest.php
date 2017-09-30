@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -43,5 +46,45 @@ class ProfileTest extends TestCase
             ->assertSee($this->user->name)
             ->assertSee($userThread->title)
             ->assertDontSee($anotherUserThread->title);
+    }
+
+    /**
+     * @test
+     */
+    public function testGuestCanNotUploadAvatar()
+    {
+        $this->withExceptionHandling();
+
+        $this->json('post', 'profile/avatar')
+            ->assertStatus(401);
+    }
+
+    /**
+     * @test
+     */
+    public function aUserCanUploadAValidAvatar()
+    {
+        $this->withExceptionHandling()->signIn();
+
+        $this->json('post', 'profile/avatar', ['avatar' => 'not-an-image'])
+            ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    public function aUserCanUploadAvatar()
+    {
+        Storage::fake('public');
+
+        $this->signIn();
+
+        $avatar = UploadedFile::fake()->image('avatar.jpg');
+
+        $this->json('post', 'profile/avatar', ['avatar' => $avatar]);
+
+        $this->assertEquals(asset("avatars/{$avatar->hashName()}"), auth()->user()->avatar);
+
+        Storage::disk('public')->assertExists("avatars/{$avatar->hashName()}");
     }
 }

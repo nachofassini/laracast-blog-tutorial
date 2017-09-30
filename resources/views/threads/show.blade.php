@@ -18,6 +18,7 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <div class="level">
+                <img src="{{ $thread->creator->avatar }}" alt="" width="25" height="25">&nbsp;
                 <div class="flex">
                   <a href="{{ route('profiles.show', $thread->creator) }}">{{ $thread->creator->name }}</a> posted:
                   {{ $thread->title }}
